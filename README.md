@@ -15,7 +15,7 @@ docs/              # methodology notes, literature review, write-up drafts
 \`\`\`
 
 ## Data Sources
-- **Solar irradiance (monthly):** NASA POWER API
+- **Solar irradiance (monthly):** NASA POWER cAPI
 - **Elevation / slope / aspect:** SRTM 30m or Copernicus DEM
 - **Hydro seasonal generation (context/motivation):** GSE, IEA, ISET-PI
 
