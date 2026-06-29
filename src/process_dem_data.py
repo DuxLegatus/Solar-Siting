@@ -11,8 +11,8 @@ with open("../data/processed/georgia_grid_points.csv", "r") as f:
 with rasterio.open("../data/raw/dem/output_SRTMGL1.tif") as src:
     for (lon, lat), val in zip(grid_points, src.sample(grid_points)):
         results.append({
-            "latitude": lon,
-            "longitude": lat,
+            "latitude": lat,
+            "longitude": lon,
             "elevation": val[0]  
         })
 
