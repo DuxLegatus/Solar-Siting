@@ -19,7 +19,7 @@ result = (
       .sum()
 )
 result.rename(columns={"import_weighted_contribution": "suitability_score"}, inplace=True)
-# result.to_csv("../data/processed/georgia_solar_suitability.csv", index=False)
+result.to_csv("../data/processed/georgia_solar_suitability.csv", index=False)
 
 least = result.nsmallest(1, "suitability_score")
 most = result.nlargest(1, "suitability_score")
