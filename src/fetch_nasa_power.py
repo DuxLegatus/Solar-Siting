@@ -3,7 +3,7 @@ import time
 import json
 import csv
 grid_points = []
-with open("data/processed/georgia_grid_points.csv", "r") as f:
+with open("../data/processed/georgia_grid_points.csv", "r") as f:
     reader = csv.DictReader(f)
     for row in reader:
         grid_points.append({"lat": float(row["lat"]), "lon": float(row["lon"])})
@@ -26,7 +26,7 @@ for point in grid_points:
     response = requests.get(url, params=params)
     data = response.json()
 
-    filename = f"data/raw/nasa_power_{point['lat']}_{point['lon']}.json"
+    filename = f"../data/raw/nasa_power_{point['lat']}_{point['lon']}.json"
     with open(filename, "w") as f:
         json.dump(data, f)
 
