@@ -5,7 +5,7 @@ import branca.colormap as cm
 data = pd.read_csv("../data/processed/georgia_solar_suitability.csv")
 
 map1 = folium.Map(location=(42,43.5),zoom_control=True,min_zoom=7,max_zoom=10,tiles="CartoDB positron")
-linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=2.23, caption="Winter Solar Suitability Score (kWh/m²/day)")
+linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=2.02, caption="Winter Solar Suitability Score (kWh/m²/day)")
 lat = data["latitude"]
 lon = data["longitude"]
 score = data["suitability_score"]
