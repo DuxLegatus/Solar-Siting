@@ -15,5 +15,6 @@ data/processed/georgia_solar_data_full_debug.csv
 
 .DS_Store
 
+src/run_all.py
 
 .env
