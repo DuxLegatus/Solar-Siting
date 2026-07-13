@@ -1,8 +1,9 @@
 import geopandas as gpd
 import numpy as np
 from shapely.geometry import Point
+from config import NATURAL_EARTH_SHP,GRID_POINTS_CSV,GRID_LAT_MAX,GRID_LAT_MIN,GRID_LON_MAX,GRID_LON_MIN,GRID_STEP
 
-world = gpd.read_file("data/raw/naturalearth/ne_10m_admin_0_countries.shp")
+world = gpd.read_file(NATURAL_EARTH_SHP)
 georgia = world[world["NAME"] == "Georgia"]  
 
 if georgia.empty:
@@ -11,8 +12,8 @@ if georgia.empty:
 else:
     georgia_geom = georgia.geometry.iloc[0]
 
-    lat_range = np.arange(41.0, 43.6, 0.25)
-    lon_range = np.arange(40.0, 46.6, 0.25)
+    lat_range = np.arange(GRID_LAT_MIN, GRID_LAT_MAX, GRID_STEP)
+    lon_range = np.arange(GRID_LON_MIN, GRID_LON_MAX, GRID_STEP)
 
     grid_points = []
     for lat in lat_range:
@@ -24,7 +25,7 @@ else:
     print(f"{len(grid_points)} grid points fall inside Georgia")
 
     import csv
-    with open("data/processed/georgia_grid_points.csv", "w", newline="") as f:
+    with open(GRID_POINTS_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["lat", "lon"])
         writer.writeheader()
         writer.writerows(grid_points)

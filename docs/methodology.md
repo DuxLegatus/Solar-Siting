@@ -29,8 +29,6 @@ dif_monthly[point, month]   = gsa_dif_annual[point] * monthly_ratio[point, month
 
 The reasoning: NASA POWER's problem was *spatial* resolution, not *temporal* accuracy — its monthly seasonal cycle (day length, typical cloud season) is a large-scale climate feature that's captured reasonably well even at 50km. This lets each source do what it's actually good at: GSA for spatial detail, NASA POWER for seasonal shape. It does rest on the assumption that NASA POWER's *relative* monthly pattern is trustworthy even where its *absolute* magnitude wasn't — I'm stating that assumption explicitly here rather than leaving it implicit.
 
-Before trusting this, I checked that each point's 12 monthly ratios averaged back to ≈1.0 (std ≈ 0.0007 across all points) — confirming the ratios were internally consistent with the annual value they were derived from.
-
 ## 4. Terrain Correction
 
 The goal of this step is to convert horizontal-surface irradiance (GHI/DNI/DIF) into irradiance on the *actual* tilted surface at each grid point — using its real DEM-derived slope and aspect, not an assumed optimal panel angle.
@@ -91,20 +89,19 @@ I checked irradiance accuracy against multiple references, deliberately varying 
 | Check | Reference | Independence | Purpose |
 |---|---|---|---|
 | `adjusted_irradiance` vs PVGIS | JRC PVGIS-SARAH3/ERA5 | Fully independent — different satellite record, different methodology, uses each point's real slope/aspect | Primary external validation |
-| `adjusted_irradiance` vs GTI | GSA/Solargis | Same provider as my irradiance inputs; GTI also assumes optimum tilt, not real terrain | Secondary check, expected structural gap |
 | `raw_irradiance` vs GHI | GSA/Solargis | Not independent — `raw_irradiance` is derived directly from this layer | Internal consistency check on the downscaling math, not external validation |
 
-**PVGIS result (primary validation)**: R²=0.85, MAE=0.86 kWh/m²/day, MBE=+0.12 kWh/m²/day, n=1,440 point-months.
+**PVGIS result (primary validation)**: R²=0.85, MAE=0.86 kWh/m²/day, MBE=+0.12 kWh/m²/day, n=1,464 point-months.
 
-The R² is the number I trust most here — it confirms `adjusted_irradiance` tracks real spatial and seasonal variation as measured by a genuinely independent source, not just that the two datasets happen to land in a similar numeric range. That distinction matters — see the sidebar below.
+The R² is the number I trust most here — it confirms `adjusted_irradiance` tracks real spatial and seasonal variation as measured by a genuinely independent source, not just that the two datasets happen to land in a similar numeric range.
 
-The small positive MBE (+0.12) is consistent with something my model doesn't do: PVGIS applies DEM-based horizon shading (accounting for nearby terrain blocking low-angle sun), while my correction only considers local slope/aspect tilt, not surrounding terrain. I've listed this under Known Limitations rather than treating it as unexplained error.
+A closer look at the residuals (error broken down by slope and by month) shows the average error isn't uniform: it's a real seasonal swing, overestimating in summer and underestimating in winter, rather than a flat bias or one driven by terrain steepness. 
 
-Full metrics and plots for all three comparisons are in `validation_summary.md` and the accompanying PNGs.
+Full metrics and plots for all comparisons are in `validation_summary.md` and the accompanying PNGs.
 
 ## 7. Known Limitations
 - **Grid resolution** (0.25°, ~25km spacing) is fine for national-scale screening, but too coarse for individual site-level decisions.
-- **No horizon/terrain shading is modeled** — only local slope/aspect tilt, evidenced by the positive MBE in the PVGIS validation.
+- **Downscaled irradiance carries a seasonal bias**  see validation_summary.md for the full residual analysis and what it means for this project's winter-focused goal.
 - **No grid/transmission proximity factor** is included yet, despite being one of the biggest practical constraints in real-world solar siting.
 - **Land cover suitability multipliers** (if included) are illustrative starting values, not empirically derived from a published weighting scheme — see the notes in that script for the reasoning.
 

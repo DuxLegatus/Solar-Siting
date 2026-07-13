@@ -1,16 +1,14 @@
 import json
 import csv
 import rasterio
-grid_points = []
-with open("../data/processed/georgia_grid_points.csv", "r") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        grid_points.append((float(row["lon"]), float(row["lat"])))
+from config import GRID_POINTS_CSV, SLOPE_TIF,SLOPE_ASPECT_CSV,ASPECT_TIF
+from utils import get_grid_points
+grid_points = get_grid_points()
 
 results = []
 
-with rasterio.open("../data/raw/dem/slope.tif") as slope_src, \
-     rasterio.open("../data/raw/dem/aspect.tif") as aspect_src:
+with rasterio.open(SLOPE_TIF) as slope_src, \
+     rasterio.open(ASPECT_TIF) as aspect_src:
         slope_gen = slope_src.sample(grid_points)
         aspect_gen = aspect_src.sample(grid_points)
         
@@ -22,7 +20,7 @@ with rasterio.open("../data/raw/dem/slope.tif") as slope_src, \
                 "aspect": aspect_val[0]
             })
 
-with open("../data/processed/georgia_slope_aspect.csv", "w", newline="") as csvfile:
+with open(SLOPE_ASPECT_CSV, "w", newline="") as csvfile:
     fieldnames = ["latitude","longitude","slope","aspect"]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()

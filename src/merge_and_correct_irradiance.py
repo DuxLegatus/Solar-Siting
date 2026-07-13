@@ -1,30 +1,18 @@
 import pandas as pd
 import numpy as np
+from config import IRRADIANCE_DOWNSCALED_CSV,ELEVATION_CSV,SLOPE_ASPECT_CSV,SOLAR_DATA_FINAL_CSV,SOLAR_DATA_DEBUG_CSV,DECLINATION_BY_MONTH
 
-df_irradiance = pd.read_csv("../data/processed/georgia_irradiance_downscaled.csv")
-df_elevation = pd.read_csv("../data/processed/georgia_elevation.csv")
-df_slope_aspect = pd.read_csv("../data/processed/georgia_slope_aspect.csv")
+df_irradiance = pd.read_csv(IRRADIANCE_DOWNSCALED_CSV)
+df_elevation = pd.read_csv(ELEVATION_CSV)
+df_slope_aspect = pd.read_csv(SLOPE_ASPECT_CSV)
 df1 = df_elevation.merge(df_slope_aspect)
 azimuth_rad = np.radians(180)
 
 merged_df = pd.merge(df1,df_irradiance, on=['latitude', 'longitude'], how="inner")
 
-declination = {
-    1: -20.9,
-    2: -13.0,
-    3: -2.4,
-    4: 9.4,
-    5: 18.8,
-    6: 23.1,
-    7: 21.2,
-    8: 13.5,
-    9: 2.2,
-    10: -9.6,
-    11: -18.9,
-    12: -23.0 
-}
+
 merged_df.loc[merged_df["aspect"] == -9999, "aspect"] = np.nan
-merged_df["declination"] = merged_df["month"].map(declination)
+merged_df["declination"] = merged_df["month"].map(DECLINATION_BY_MONTH)
 merged_df["latitude_rad"] = np.radians(merged_df["latitude"])
 merged_df["declination_rad"] = np.radians(merged_df["declination"])
 merged_df["slope_rad"] = np.radians(merged_df["slope"])
@@ -38,6 +26,6 @@ merged_df["adjusted_irradiance"] = (
     + merged_df["dif_monthly"] * (1 + np.cos(merged_df["slope_rad"])) / 2
 )
 merged_df.rename(columns={"ghi_monthly": "raw_irradiance"}, inplace=True)
-merged_df.to_csv("../data/processed/georgia_solar_data_full_debug.csv",index=False)
+merged_df.to_csv(SOLAR_DATA_DEBUG_CSV,index=False)
 
-merged_df[["latitude","raw_irradiance","longitude","month","aspect","slope","declination","adjusted_irradiance"]].to_csv("../data/processed/georgia_solar_data_final.csv",index=False)
+merged_df[["latitude","raw_irradiance","longitude","month","aspect","slope","declination","adjusted_irradiance"]].to_csv(SOLAR_DATA_FINAL_CSV,index=False)

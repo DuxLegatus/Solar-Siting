@@ -1,14 +1,12 @@
 import rasterio
 import csv
+from config import DEM_TIF,GRID_POINTS_CSV,ELEVATION_CSV
 
-grid_points = []
+from utils import get_grid_points
 results = []
-with open("../data/processed/georgia_grid_points.csv", "r") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        grid_points.append((float(row["lon"]), float(row["lat"])))
+grid_points = get_grid_points()
 
-with rasterio.open("../data/raw/dem/output_SRTMGL1.tif") as src:
+with rasterio.open(DEM_TIF) as src:
     for (lon, lat), val in zip(grid_points, src.sample(grid_points)):
         results.append({
             "latitude": lat,
@@ -17,7 +15,7 @@ with rasterio.open("../data/raw/dem/output_SRTMGL1.tif") as src:
         })
 
 
-with open("../data/processed/georgia_elevation.csv", "w", newline="") as csvfile:
+with open(ELEVATION_CSV, "w", newline="") as csvfile:
     fieldnames = ["latitude","longitude","elevation"]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()

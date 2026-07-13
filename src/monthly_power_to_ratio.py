@@ -1,8 +1,9 @@
 import pandas as pd 
 import csv
 import rasterio
-
-data = pd.read_csv("../data/processed/solar_irradiance_monthly_avg.csv")
+from config import NASA_POWER_MONTHLY_AVG_CSV,GRID_POINTS_CSV,GSA_DIF_TIF,GSA_DNI_TIF,GSA_GHI_TIF,IRRADIANCE_DOWNSCALED_CSV
+from utils import get_grid_points
+data = pd.read_csv(NASA_POWER_MONTHLY_AVG_CSV)
 ratios = []
 
 for (lat,lon), group in data.groupby(["latitude","longitude"]):
@@ -15,12 +16,8 @@ for (lat,lon), group in data.groupby(["latitude","longitude"]):
             "monthly_ratio": row["irradiance"] / annual_value
         })
 ratios_df = pd.DataFrame(ratios)
-grid_points = []
 
-with open("../data/processed/georgia_grid_points.csv", "r") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        grid_points.append((float(row["lon"]), float(row["lat"])))
+grid_points = get_grid_points()
 
 def sample_annual_raster(path, colname):
     results = []
@@ -30,9 +27,9 @@ def sample_annual_raster(path, colname):
     return pd.DataFrame(results)
 
 
-ghi_df = sample_annual_raster("../data/raw/validation/GHI.tif", "ghi_annual")
-dni_df = sample_annual_raster("../data/raw/validation/DNI.tif", "dni_annual")
-dif_df = sample_annual_raster("../data/raw/validation/DIF.tif", "dif_annual")
+ghi_df = sample_annual_raster(GSA_GHI_TIF, "ghi_annual")
+dni_df = sample_annual_raster(GSA_DNI_TIF, "dni_annual")
+dif_df = sample_annual_raster(GSA_DIF_TIF, "dif_annual")
 
 final_df = (
     ratios_df
@@ -46,4 +43,4 @@ final_df["dni_monthly"] = final_df["dni_annual"] * final_df["monthly_ratio"]
 final_df["dif_monthly"] = final_df["dif_annual"] * final_df["monthly_ratio"]
 
 final_df = final_df.drop(columns=["ghi_annual", "dni_annual", "dif_annual","monthly_ratio"])
-final_df.to_csv("../data/processed/georgia_irradiance_downscaled.csv", index=False)
+final_df.to_csv(IRRADIANCE_DOWNSCALED_CSV, index=False)

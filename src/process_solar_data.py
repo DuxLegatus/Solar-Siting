@@ -1,7 +1,7 @@
 import os
 import json
 import csv
-
+from config import NASA_POWER_RAW_CSV
 path =  "../data/raw"
 
 contents = os.listdir(path)
@@ -19,12 +19,12 @@ for content in contents:
         data_writing = {
             "latitude": latitude,
             "longitude": longitude,
-            "year_month": i, # there is going to be 13 months in total, 13th months is average irradiance through the whole year
+            "year_month": i, # there is going to be 13 months in total, 13th month is average irradiance through the whole year
             "irradiance": irradiance[i]
         }
         results.append(data_writing)
 
-with open('../data/processed/solar_irradiance_processed.csv', 'w', newline='') as csvfile:
+with open(NASA_POWER_RAW_CSV, 'w', newline='') as csvfile:
     fieldnames = ['latitude', 'longitude', 'year_month', 'irradiance']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()

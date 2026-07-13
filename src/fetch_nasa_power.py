@@ -1,12 +1,9 @@
 import requests
 import time
 import json
-import csv
-grid_points = []
-with open("../data/processed/georgia_grid_points.csv", "r") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        grid_points.append({"lat": float(row["lat"]), "lon": float(row["lon"])})
+from utils import get_grid_points
+grid_points = get_grid_points()
+
 
 print(f"Loaded {len(grid_points)} grid points")
 results = []

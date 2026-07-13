@@ -1,15 +1,16 @@
 import folium
 import pandas as pd
 import branca.colormap as cm
+from config import SUITABILITY_CSV,SUITABILITY_MAP_HTML
 
-data = pd.read_csv("../data/processed/georgia_solar_suitability.csv")
+data = pd.read_csv(SUITABILITY_CSV)
 
 map1 = folium.Map(location=(42,43.5),zoom_control=True,min_zoom=7,max_zoom=10,tiles="CartoDB positron")
 linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=2.02, caption="Winter Solar Suitability Score (kWh/m²/day)")
 lat = data["latitude"]
 lon = data["longitude"]
 score = data["suitability_score"]
-for i in range(122):
+for i in range(123):
 
     folium.CircleMarker(
         location=[lat[i],lon[i]],
@@ -25,4 +26,4 @@ title_html = '''
              '''
 map1.get_root().html.add_child(folium.Element(title_html))
 
-map1.save("../site/georgia_suitability_map.html")
+map1.save(SUITABILITY_MAP_HTML)
