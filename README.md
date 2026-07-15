@@ -13,9 +13,9 @@ This project identifies optimal regions for solar deployment in Georgia by combi
 Full derivation and formulas in `docs/methodology.md`.
 
 ## Validation
-Getting the irradiance numbers right matters more than any other part of this pipeline, so it's validated against two very different kinds of reference data — not just one comparison that could look good by chance.
+Getting the irradiance numbers right matters more than any other part of this pipeline, so it's validated against two very different kinds of reference data, not just one comparison that could look good by chance.
 
-The strongest check compares `adjusted_irradiance` against **PVGIS** (JRC's PVGIS-SARAH3 dataset, built on ERA5 reanalysis). This is a genuinely independent source — a different satellite record, different modeling methodology, no shared lineage with GSA/Solargis at all — and it's queried using each point's real slope and aspect rather than an idealized tilt, so it's testing the model on its own terms:
+The strongest check compares `adjusted_irradiance` against **PVGIS** (JRC's PVGIS-SARAH3 dataset, built on ERA5 reanalysis). This is a genuinely independent source and it's queried using each point's real slope and aspect rather than an idealized tilt, so it's testing the model on its own terms:
 
 | Metric | Value |
 |---|---|
@@ -33,7 +33,7 @@ Two additional, less independent checks were also run and are documented in `doc
 Being upfront about what this model doesn't do is as important as showing what it does:
 
 - **Grid resolution** (0.25°, ~25km spacing) works well for national-scale screening but is too coarse to make individual site-level decisions from directly.
-- **No horizon/terrain shading is modeled** — only local slope/aspect tilt. This is the likely cause of the small positive bias seen in the PVGIS validation (MBE ≈ +0.12 kWh/m²/day): PVGIS accounts for nearby terrain blocking the sun at low angles, and this pipeline currently doesn't.
+- **No horizon/terrain shading is modeled** only local slope/aspect tilt. This is the likely cause of the small positive bias seen in the PVGIS validation (MBE ≈ +0.12 kWh/m²/day): PVGIS accounts for nearby terrain blocking the sun at low angles, and this pipeline currently doesn't.
 - **No grid/transmission proximity factor** is included yet, despite being one of the biggest practical constraints in real-world solar siting.
 - **Land cover suitability weights** (if included) are illustrative starting values, not empirically derived from published siting studies. See `docs/methodology.md` for the full caveat.
 

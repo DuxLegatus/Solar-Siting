@@ -1,6 +1,6 @@
 import pandas as pd
-from config import LANDCOVER_CSV,PROTECTED_AREA_CSV,SOLAR_DATA_FINAL_CSV,SUITABILITY_CSV,TOTAL_ANNUAL_IMPORTS_GWH,MONTHLY_IMPORTS_GWH,SYSTEM_LOSS_FACTOR
-
+from config import LANDCOVER_CSV,PROTECTED_AREA_CSV,SOLAR_DATA_FINAL_CSV,SUITABILITY_CSV,IMPORT_SHARE_BY_MONTH,SYSTEM_LOSS_FACTOR
+from utils import (compute_suitability)
 landtype = pd.read_csv(LANDCOVER_CSV)
 protected_area = pd.read_csv(PROTECTED_AREA_CSV)
 landtype = landtype.rename(columns={
@@ -24,24 +24,28 @@ df = df.merge(
 )
 
 
-df["import_percentage"] = (df["month"].map(MONTHLY_IMPORTS_GWH)).fillna(0)
+df["import_percentage"] = (df["month"].map(IMPORT_SHARE_BY_MONTH)).fillna(0)
 
-df["import_weighted_contribution"] = (
-    df["adjusted_irradiance"]
-    * df["import_percentage"]
-    * df["solar_multiplier"]
-    * df["protected_multiplier"]
-    * SYSTEM_LOSS_FACTOR
-).round(2)
+baseline = compute_suitability(df)
+baseline.to_csv(SUITABILITY_CSV, index=False)
 
-result = (
-    df.groupby(["latitude", "longitude"], as_index=False)["import_weighted_contribution"]
-    .sum()
-)
+while True:
+    solar = input("Enter: Solar Multiplier (if you do not choose it will automatically be 1, please choose value between 0.8 and 1.2): ").strip()
+    loss = input("Enter Loss_multiplier: ")
+    solar_scale = float(solar)if solar else 1.0
+    loss_scale = float(loss)if loss else SYSTEM_LOSS_FACTOR
+    result = compute_suitability(df, solar_scale, loss_scale)
+    top10 = result.nlargest(10, "suitability_score")
+    top10_set = set(top10.apply(lambda r: (r["latitude"], r["longitude"]), axis=1))
+    baseline_top10_set = set(baseline.nlargest(10, "suitability_score").apply(lambda r: (r["latitude"], r["longitude"]), axis=1))
+    print(f"\nTop 10 under these assumptions:\n{top10[['latitude','longitude','suitability_score']]}")
 
-result.rename(columns={"import_weighted_contribution": "suitability_score"}, inplace=True)
-result.to_csv(SUITABILITY_CSV, index=False)
+    save = input("\nSave this scenario? (y/n): ").strip().lower()
+    if save == "y":
+        name = input("Filename (without .csv): ").strip()
+        result.to_csv(f"../data/processed/{name}.csv", index=False)
+        print(f"Saved -> ../data/processed/{name}.csv")
 
-least = result.nsmallest(1, "suitability_score")
-most = result.nlargest(1, "suitability_score")
-print(least,most)
+    again = input("\nTry another scenario? (y/n): ").strip().lower()
+    if again != "y":
+        break
