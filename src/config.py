@@ -21,6 +21,8 @@ GSA_GHI_TIF = RAW_DIR / "validation" / "GHI.tif"
 GSA_DNI_TIF = RAW_DIR / "validation" / "DNI.tif"
 GSA_DIF_TIF = RAW_DIR / "validation" / "DIF.tif"
 
+OSM_DATA = RAW_DIR / "georgia-260716.osm.pbf"
+
 WDPA_SHAPEFILES = [
     RAW_DIR / "WDPA_WDOECM_Jul2026_Public_GEO_shp_0" / "WDPA_WDOECM_Jul2026_Public_GEO_shp-polygons.shp",
     RAW_DIR / "WDPA_WDOECM_Jul2026_Public_GEO_shp_1" / "WDPA_WDOECM_Jul2026_Public_GEO_shp-polygons.shp",
@@ -32,6 +34,7 @@ ELEVATION_CSV = PROCESSED_DIR / "georgia_elevation.csv"
 SLOPE_ASPECT_CSV = PROCESSED_DIR / "georgia_slope_aspect.csv"
 LANDCOVER_CSV = PROCESSED_DIR / "georgia_grid_with_landtype.csv"
 PROTECTED_AREA_CSV = PROCESSED_DIR / "georgia_protected_area.csv"
+GRID_ACCESSIBILITY_CSV = PROCESSED_DIR / "grid_accessibility.csv"
  
 NASA_POWER_RAW_CSV = PROCESSED_DIR / "solar_irradiance_processed.csv"
 NASA_POWER_MONTHLY_AVG_CSV = PROCESSED_DIR / "solar_irradiance_monthly_avg.csv"

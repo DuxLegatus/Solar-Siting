@@ -11,8 +11,10 @@ main = gpd.GeoDataFrame(
     crs=file1.crs
 )
 
-grid = pd.read_csv(GRID_POINTS_CSV)
+MIN_PROTECTED_AREA_KM2 = 2.0
+main = main[main["GIS_AREA"] >= MIN_PROTECTED_AREA_KM2]
 
+grid = pd.read_csv(GRID_POINTS_CSV)
 grid_gdf = gpd.GeoDataFrame(
     grid,
     geometry=gpd.points_from_xy(grid["lon"], grid["lat"]),
@@ -21,23 +23,8 @@ grid_gdf = gpd.GeoDataFrame(
 
 main = main.to_crs(grid_gdf.crs)
 
-joined = gpd.sjoin(
-    grid_gdf,
-    main,
-    how="left",
-    predicate="within"
-)
-
-
+joined = gpd.sjoin(grid_gdf, main, how="left", predicate="within")
 joined["protected_multiplier"] = joined["index_right"].isna().astype(int)
+joined = joined.groupby(["lat", "lon"], as_index=False)["protected_multiplier"].min()
 
-joined = (
-    joined.groupby(["lat", "lon"], as_index=False)["protected_multiplier"]
-    .min()
-)
-
-joined.to_csv(
-    PROTECTED_AREA_CSV,
-    index=False
-)
-
+joined.to_csv(PROTECTED_AREA_CSV, index=False)

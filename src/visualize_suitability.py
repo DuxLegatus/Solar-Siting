@@ -6,11 +6,11 @@ from config import SUITABILITY_CSV,SUITABILITY_MAP_HTML
 data = pd.read_csv(SUITABILITY_CSV)
 
 map1 = folium.Map(location=(42,43.5),zoom_control=True,min_zoom=7,max_zoom=10,tiles="CartoDB positron")
-linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=2.02, caption="Winter Solar Suitability Score (kWh/m²/day)")
+linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=data["suitability_score"].max(), caption="Winter Solar Suitability Score (kWh/m²/day)")
 lat = data["latitude"]
 lon = data["longitude"]
 score = data["suitability_score"]
-for i in range(123):
+for i in range(len(lat)):
 
     folium.CircleMarker(
         location=[lat[i],lon[i]],

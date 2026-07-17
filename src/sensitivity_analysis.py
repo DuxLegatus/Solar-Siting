@@ -36,4 +36,4 @@ for scenario in scenarios:
 
 summary = pd.DataFrame(results)
 print(summary)
-summary.to_csv("sensitivity_analysis_summary.csv", index=False)
+summary.to_csv("../data/processed/sensitivity_analysis_summary.csv", index=False)

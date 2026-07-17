@@ -1,9 +1,14 @@
 import pandas as pd
-from config import LANDCOVER_CSV,PROTECTED_AREA_CSV,SOLAR_DATA_FINAL_CSV,SUITABILITY_CSV,IMPORT_SHARE_BY_MONTH,SYSTEM_LOSS_FACTOR
+from config import LANDCOVER_CSV,PROTECTED_AREA_CSV,SOLAR_DATA_FINAL_CSV,SUITABILITY_CSV,IMPORT_SHARE_BY_MONTH,SYSTEM_LOSS_FACTOR, GRID_ACCESSIBILITY_CSV
 from utils import (compute_suitability)
 landtype = pd.read_csv(LANDCOVER_CSV)
 protected_area = pd.read_csv(PROTECTED_AREA_CSV)
 landtype = landtype.rename(columns={
+    "lat": "latitude",
+    "lon": "longitude"
+})
+grid_accessibility = pd.read_csv(GRID_ACCESSIBILITY_CSV)
+grid_accessibility = grid_accessibility.rename(columns={
     "lat": "latitude",
     "lon": "longitude"
 })
@@ -22,8 +27,14 @@ df = df.merge(
     on=["latitude", "longitude"],
     how="left"
 )
+df = df.merge(
+    grid_accessibility[["latitude", "longitude", "grid_score"]],
+    on=["latitude", "longitude"],
+    how="left"
+)
 
-
+duplicates = df.groupby(["latitude", "longitude"]).size()
+print(duplicates.max())
 df["import_percentage"] = (df["month"].map(IMPORT_SHARE_BY_MONTH)).fillna(0)
 
 baseline = compute_suitability(df)

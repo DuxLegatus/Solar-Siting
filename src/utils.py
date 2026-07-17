@@ -18,6 +18,7 @@ def compute_suitability(df,solar_mutliplier=1,system_loss_multiplier=SYSTEM_LOSS
         * df["import_percentage"]
         * (df["solar_multiplier"] * solar_mutliplier)
         * df["protected_multiplier"]
+        * df["grid_score"]
         * system_loss_multiplier
     ).round(2)
 
