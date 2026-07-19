@@ -4,12 +4,12 @@ import branca.colormap as cm
 from config import SUITABILITY_CSV,SUITABILITY_MAP_HTML
 
 data = pd.read_csv(SUITABILITY_CSV)
-
+data["suitability_index"] = round((data["suitability_score"]-data["suitability_score"].min())/(data["suitability_score"].max()-data["suitability_score"].min()),3)
 map1 = folium.Map(location=(42,43.5),zoom_control=True,min_zoom=7,max_zoom=10,tiles="CartoDB positron")
-linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=data["suitability_score"].max(), caption="Winter Solar Suitability Score (kWh/m²/day)")
+linear = cm.LinearColormap(["red", "yellow", "green"], vmin=0, vmax=data["suitability_index"].max(), caption="Winter Solar Suitability Score (kWh/m²/day)")
 lat = data["latitude"]
 lon = data["longitude"]
-score = data["suitability_score"]
+score = data["suitability_index"]
 for i in range(len(lat)):
 
     folium.CircleMarker(
