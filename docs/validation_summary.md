@@ -17,7 +17,7 @@
 
 ## Residual Analysis
 
-Three follow-up plots examine *where* the ~0.86 kWh/m²/day average error comes from.
+Three follow-up plots examine *where* the ~0.85 kWh/m²/day average error comes from.
 
 ### Error distribution
 ![Error histogram](pvgis_error_histogram.png)

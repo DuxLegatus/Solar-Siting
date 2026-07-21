@@ -31,7 +31,7 @@ The reasoning: NASA POWER's problem was *spatial* resolution, not *temporal* acc
 
 ## 4. Terrain Correction
 
-The main goal of this step was to apply aoi(angle of incidence) into the calculations. That way we would have gotten data that actually represents the tilted terrain instead of just straight irradiance which does not factor in things like slope, aspect, suns position during certain months etc.
+The main goal of this step was to apply aoi(angle of incidence) into the calculations. That way we would have gotten data that actually represents the tilted terrain instead of just straight irradiance which does not factor in things like slope, aspect and suns position during certain months etc.
 
 **Formula**:
 ```
@@ -45,7 +45,18 @@ adjusted_irradiance = dni_monthly · cos_aoi + dif_monthly · (1 + cos(slope)) /
 Solar declination is a fixed monthly climatological value rather than solved per-day, and `sun_azimuth` is fixed at 180° (south), approximating the sun's position at solar noon in the Northern Hemisphere.
 
 
-## 5. Suitability Score
+## 5. Grid accesibility
+
+This step is supposed to get data of transmission lines in the georgia. This is very important, because for solar plants to actually work effectively there is need for transmission lines to be close to the actual plant location. This data was fetched from OpenStreetMap.
+After fetching the data, it is processed and then the calculation is run to compute how close is the line to the grid point. if it does exceeds certain range, The score will go down.
+**Formula for grid score**
+```
+line_score = 1 / (1 + distance_to_line_km / 25)
+substation_score = 1 / (1 + distance_to_substation_km / 25)
+grid_score = (line_score + substation_score) / 2
+```
+
+## 6. Suitability Score
 This is supposed to use all of the data to get the final Suitability score
 
 **Formula**:
@@ -55,7 +66,8 @@ suitability_score[point] = Σ over months (
     × energy_import_share[month]
     × solar_multiplier[point]
     × protected_multiplier[point]
-    × 0.85
+    × grid_score[point]
+    × system_loss_factor
 )
 ```
 
@@ -73,9 +85,9 @@ suitability_score[point] = Σ over months (
 Only five months which imported matter to the final suitability score.
 **The Solar_multiplier** penalizes certain land types. the land type data for Georgia was arquired from the ESA WorldCover.
 **The Protected_multiplier** is represantation of nationally protected areas in Georgia. The data for it was gathered from WDPA. If the area is protected then solar suitability becomes 0 in that region.
-A fixed 0.85 multiplier is also applied, representing an estimated system loss factor
+**system_loss_factor** is applied which ranges from 0.75 to 0.9 based on the adjustable parameter, but the default value of this is 0.85
 
-## 6. Validation
+## 7. Validation
 
 I checked irradiance accuracy against PVGIS, which is a tool developed by the European Commission that calculates the solar energy production potential of photovoltaic systems at any location worldwide. It is free, fast and completely independet from GSA, so it was a natural choice when picking a source to verify my data.
 
@@ -91,13 +103,13 @@ A closer look at the residuals (error broken down by slope and by month) shows t
 
 Full metrics and plots for all comparisons are in `validation_summary.md` and the accompanying PNGs.
 
-## 7. Known Limitations
+## 8. Known Limitations
 - **Grid resolution** (0.25°, ~25km spacing) is fine for national-scale screening, but too coarse for individual site-level decisions.
 - **Downscaled irradiance carries a seasonal bias**  see validation_summary.md for the full residual analysis and what it means for this project's winter-focused goal.
-- **No grid/transmission proximity factor** is included yet, despite being one of the biggest practical constraints in real-world solar siting.
+- **Several weighting factors in the suitability score** (land cover multipliers, the protected-area minimum-size threshold, and grid proximity's voltage/distance parameters) reflect judgment calls rather than published, empirically-derived models.
 
 
-## 8. Data Sources
+## 9. Data Sources
 - **Solar irradiance (GHI/DNI/DIF, annual, 250m):** [Global Solar Atlas](https://globalsolaratlas.info) (Solargis)
 - **Solar irradiance (monthly seasonal shape):** [NASA POWER](https://power.larc.nasa.gov) (`ALLSKY_SFC_SW_DWN`)
 - **Independent irradiance validation:** [PVGIS](https://re.jrc.ec.europa.eu/pvg_tools/en/) (JRC, PVGIS-SARAH3 / ERA5)
