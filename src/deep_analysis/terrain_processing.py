@@ -28,9 +28,9 @@ for i in range(1,4):
             'crs': dem_projected.crs,
             'nodata': -99999
         }
-        
+        filled = np.ma.filled(data.data, -99999)
         with rasterio.open(filename, "w", **profile) as dst:
-            dst.write(data.data.astype(data.dtype), 1)
+            dst.write(filled.astype(data.dtype), 1)
 
         
 

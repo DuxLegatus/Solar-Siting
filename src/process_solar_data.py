@@ -24,8 +24,8 @@ for content in contents:
         }
         results.append(data_writing)
 
-with open(NASA_POWER_RAW_CSV, 'w', newline='') as csvfile:
-    fieldnames = ['latitude', 'longitude', 'year_month', 'irradiance']
+with open(NASA_POWER_RAW_CSV, "w", newline="") as csvfile:
+    fieldnames = ["latitude", "longitude", "year_month", "irradiance"]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(results)
