@@ -4,7 +4,7 @@ This document is supposed to explain the pipeline in detail, the design choices 
 
 ## 1. Grid Generation
 
-This is a regular 0.25° latitude/longitude grid meant to represent Georgia. In total there are 123 points on the grid, spaced roughly 25km apart. I decided this resolution would be enough for this project, since it's fast and accurate enough to represent how suitable a region is for solar power at a national scale.
+This is a regular 0.25° latitude/longitude grid meant to represent Georgia. In total there are 122 points on the grid, spaced roughly 25km apart. I decided this resolution would be enough for this project, since it's fast and accurate enough to represent how suitable a region is for solar power at a national scale.
 
 ## 2. Terrain: Elevation, Slope, Aspect
 
@@ -14,7 +14,7 @@ Elevation, slope, and aspect are all sampled from the SRTM 30m DEM at each grid 
 
 ## 3. Irradiance: Combining GSA and NASA POWER
 
-Initially I decided to use nasa power for the irradiance. It has a simple, free monthly API and was the natural starting point, however it had its limitations, which I was not aware of at the start of the project. The issue only became apparent during validation: NASA POWER's native resolution is roughly 50km, and once I compared it against the Global Solar Atlas, it turned out my 123 grid points were mapping to 15 distinct NASA POWER values. Many "different" points on the grid were silently returning identical irradiance, regardless of real differences in terrain or local climate.
+Initially I decided to use nasa power for the irradiance. It has a simple, free monthly API and was the natural starting point, however it had its limitations, which I was not aware of at the start of the project. The issue only became apparent during validation: NASA POWER's native resolution is roughly 50km, and once I compared it against the Global Solar Atlas, it turned out my 122 grid points were mapping to 15 distinct NASA POWER values. Many "different" points on the grid were silently returning identical irradiance, regardless of real differences in terrain or local climate.
 
 Rather than to drop NASA POWER entirely, I combined it with the Global Solar Atlas: GSA supplies fine-grained (250m) spatial detail, and NASA POWER's monthly time series supplies the seasonal shape that GSA's annual-only Georgia data doesn't include on its own.
 
@@ -97,7 +97,7 @@ I checked irradiance accuracy against PVGIS, which is a tool developed by the Eu
 
 **PVGIS result (primary validation)**: R²=0.85, MAE=0.86 kWh/m²/day, MBE=+0.12 kWh/m²/day, n=1,464 point-months.
 
-The R² is the number I trust most here. It confirms `adjusted_irradiance` tracks real spatial and seasonal variation as measured by an independent source, not that the two datasets happen to land in a similar numeric range.
+The R² number confirms `adjusted_irradiance` tracks real spatial and seasonal variation as measured by an independent source, not that the two datasets happen to land in a similar numeric range.
 
 A closer look at the residuals (error broken down by slope and by month) shows the average error isn't uniform: it's a real seasonal swing, overestimating in summer and underestimating in winter, rather than a flat bias or one driven by terrain steepness. 
 

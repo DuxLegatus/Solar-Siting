@@ -31,9 +31,14 @@ for i in range(1,4):
         score_sum += np.ma.filled(suitability_score, 0)
 
         print(score_sum)
+    valid_values = score_sum.compressed()
+    score_min = valid_values.min()
+    score_max = valid_values.max()
+    normal_score = (score_sum - score_min) / (score_max - score_min)
+    normal_score = normal_score.astype(np.float32)
     profile.update(dtype="float32", count=1, nodata=-9999)
     output = f"../data/raw/deep_analysis/site_{i}_suitability_score.tif"
     with rasterio.open(output, "w", **profile) as dst:
-        dst.write(score_sum.filled(-9999).astype("float32"), 1)
+        dst.write(normal_score.filled(-9999).astype("float32"), 1)
 
     

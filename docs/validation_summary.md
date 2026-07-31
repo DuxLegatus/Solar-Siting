@@ -4,7 +4,7 @@
 
 | Metric | Value |
 |---|---|
-| Points compared | 1,464 (122 points × 12 months — see note below on n) |
+| Points compared | 1,464 (122 points × 12 months) |
 | R | 0.9233 |
 | R² | 0.8525 |
 | MAE | 0.8632 kWh/m²/day |
@@ -33,7 +33,7 @@ This checks if the model gets worse as terrain gets more steeper. If we look at 
 ![Error by month](pvgis_error_by_month.png)
 
 This plot shows the mean error by month. It shows us that model overestimates irradiance in summer and underestimates it during winter.
-This explains the skewed histogram above. Since the terrain-correction formula itself has no month-dependence beyond slope/aspect/declination, this pattern most likely comes from an earlier stage: the irradiance downscaling step assumes NASA POWER's monthly *seasonal shape* is reliable even though its absolute magnitude wasn't. This plot suggests that this assumption isn't perfectly clean — NASA POWER's seasonal curve for Georgia may be somewhat more exaggerated (too high in summer, too low in winter) than GSA's true monthly distribution, which isn't directly measurable since GSA only provides annual data for this region.
+This explains the skewed histogram above. Since the terrain-correction formula itself has no month-dependence beyond slope/aspect/declination, this pattern most likely comes from an earlier stage: the irradiance downscaling step assumes NASA POWER's monthly *seasonal shape* is reliable even though its absolute magnitude wasn't. This plot suggests that this assumption isn't perfectly clean. NASA POWER's seasonal curve for Georgia may be somewhat more exaggerated (too high in summer, too low in winter) than GSA's true monthly distribution, which isn't directly measurable since GSA only provides annual data for this region.
 
 **Why this matters**: 
 The main question of this project is about solar potential in Georgia during winter, so the fact that the model underestimates irradiance specifically in winter means the final suitability score is likely conservative for exactly the months this project cares about most. Since suitability is calculated directly from irradiance, underestimated input means an underestimated score. In other words, the real winter suitability of these locations is probably a bit *higher* than the model currently assumes.
