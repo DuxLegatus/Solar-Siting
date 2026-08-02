@@ -12,13 +12,17 @@ merged_df = pd.merge(df1,df_irradiance, on=['latitude', 'longitude'], how="inner
 
 
 merged_df.loc[merged_df["aspect"] == -9999, "aspect"] = np.nan
+flat = (merged_df["slope"] == 0) & (merged_df["aspect"].isna())
+merged_df.loc[flat, "aspect"] = 180
 merged_df["declination"] = merged_df["month"].map(DECLINATION_BY_MONTH)
 merged_df["latitude_rad"] = np.radians(merged_df["latitude"])
 merged_df["declination_rad"] = np.radians(merged_df["declination"])
 merged_df["slope_rad"] = np.radians(merged_df["slope"])
 merged_df["aspect_rad"] = np.radians(merged_df["aspect"])
 merged_df["cos_zenith"] = np.sin(merged_df["latitude_rad"]) * np.sin(merged_df["declination_rad"]) + np.cos(merged_df["latitude_rad"]) * np.cos(merged_df["declination_rad"])
-merged_df["sin_zenith"] = np.sqrt(1-(merged_df["cos_zenith"]**2))
+merged_df["sin_zenith"] = np.sqrt(
+    np.clip(1 - merged_df["cos_zenith"]**2, 0, None)
+)
 merged_df["cos_aoi"] = merged_df["cos_zenith"] * np.cos(merged_df["slope_rad"]) + merged_df["sin_zenith"] * np.sin(merged_df["slope_rad"]) * np.cos(azimuth_rad - merged_df["aspect_rad"])
 merged_df["cos_aoi"] = np.clip(merged_df["cos_aoi"],0,None)
 merged_df["adjusted_irradiance"] = (
