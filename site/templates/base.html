@@ -7,7 +7,7 @@
 
     <title>{% block title %}Georgia Solar Siting{% endblock %}</title>
 
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/base.css') }}">
 </head>
 
 <body>
@@ -24,7 +24,15 @@
         {% endblock %}
     </main>
 
-    <footer>
+    <footer class="footer1" style="    background-color: rgb(87, 87, 87);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;">
         <p>Georgia Solar Siting Project</p>
     </footer>
 
