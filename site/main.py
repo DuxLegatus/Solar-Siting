@@ -22,20 +22,7 @@ def map_page(request: Request):
         name="georgia_suitability_map.html"
     )
 
-@app.get("/findings")
-def findings(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="findings.html",
-        context={"sites": sites}
-    )
 
-@app.get("/about")
-def about(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="about.html"
-    )
 
 @app.get("/sites/{site_id}")
 def get_site(site_id: int):

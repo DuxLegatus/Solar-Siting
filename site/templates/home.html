@@ -5,15 +5,46 @@ Home | Georgia Solar Siting
 {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', path='css/home.css') }}">
-<div class="box">
+<div id="box">
 <h1>Mapping Georgia's Solar Potential</h1>
 
 <p>
-    A geospatial analysis identifying promising locations
-    for utility-scale solar development across Georgia.
+    This project analyzes the suitability of different
+    locations in Georgia for solar farm development.
 </p>
 
-<a href="/map">Explore the map</a>
+
+<p>
+   solar deployment depends on lots of things, including land availability, solar irradiance, proximity to transmission lines, terrain of the land, and more. In this project, I tried to combine all of these factors to produce a suitability map. The map is based on publicly available data, which sources I have cited in the methodology section.
+</p>
+
+<p>
+    After producing the map, I analyzed three of the most suitable areas, using more rigorous methods to determine, whether they could actually be used for solar deployment. The findings of this analysis are presented in the findings section.
+</p>
+<div>
+    <a href="#map">Explore the map</a>
+    <a href="#findings">Findings of the project</a>
+
+</div>
+</div>
+
+<div class="horizontal-connector">
+  <div class="double-line-horizontal"></div>
+</div>
+
+<div id="about">
+    <h1>How did this project start?</h1>
+    <div class="about-text">
+    <p>
+        I have been interested in renewable energy for quite a long time. This year I entered a national competition about georgia's renewable energy potential. There me and my team got more infromation about history of renewable energy, Georgia's path to energy independence, and the challenges that it currently encounters.
+        The competetion was a great experience, we got the second place and also got some ideas on how to solve the energy problems that georgia currently has. Essentially one of the main challenges for Georiga is that we are dependant on the hydro power and during winter, when the water level is low, we have to import electricity from other countries.
+        I started working on this project to find out how viable was it for Georgia to use solar energy during winter, and what were the best locations for the deployment of solar farms. 
+    </p>
+    </div>
+</div>
+
+<div class="horizontal-connector">
+  <div class="double-line-horizontal"></div>
 </div>
 
 {% endblock %}
