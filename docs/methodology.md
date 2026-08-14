@@ -37,12 +37,12 @@ The main goal of this step was to apply aoi(angle of incidence) into the calcula
 ```
 cos_zenith = sin(lat)·sin(declination) + cos(lat)·cos(declination)
 cos_aoi    = cos_zenith·cos(slope) + sin_zenith·sin(slope)·cos(sun_azimuth − aspect)
-cos_aoi    = clip(cos_aoi, 0, None)   # negative = sun is below the local horizon plane
+cos_aoi    = clip(cos_aoi, 0, None)
 
 adjusted_irradiance = dni_monthly · cos_aoi + dif_monthly · (1 + cos(slope)) / 2
 ```
 
-Solar declination is a fixed monthly climatological value rather than solved per-day, and `sun_azimuth` is fixed at 180° (south), approximating the sun's position at solar noon in the Northern Hemisphere.
+Solar declination is a fixed monthly value rather than solved per-day, and `sun_azimuth` is fixed at 180° (south), approximating the sun's position at solar noon in the Northern Hemisphere.
 
 
 ## 5. Grid accesibility

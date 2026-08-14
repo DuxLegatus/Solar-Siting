@@ -120,3 +120,240 @@ main {
         20px 100% 
     );
 }
+
+
+.methodology-content {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 40px;
+
+    background-color: rgb(236, 236, 236);
+}
+
+
+
+.methodology-content h1 {
+    font-size: 2.8rem;
+    color: #222;
+    margin-top: 0;
+    margin-bottom: 45px;
+    line-height: 1.2;
+}
+
+
+
+.methodology-content h2 {
+    font-size: 2rem;
+    color: #222;
+
+    margin-top: 70px;
+    margin-bottom: 25px;
+
+    line-height: 1.3;
+
+    border-left: 4px solid rgb(10, 133, 92);
+    padding-left: 18px;
+}
+
+
+
+.methodology-content h3 {
+    font-size: 1.4rem;
+    color: #333;
+
+    margin-top: 45px;
+    margin-bottom: 18px;
+}
+
+
+
+
+.methodology-content p {
+    max-width: 750px;
+
+    font-size: 1.1rem;
+    line-height: 1.8;
+
+    color: #444;
+
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+
+
+.methodology-content > p:first-of-type {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #222;
+}
+
+
+.methodology-content ul,
+.methodology-content ol {
+    max-width: 750px;
+
+    margin-top: 15px;
+    margin-bottom: 30px;
+
+    padding-left: 35px;
+}
+
+.methodology-content li {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+
+    margin-bottom: 10px;
+}
+
+.methodology-content a {
+    color: darkblue;
+    text-decoration: none;
+}
+
+.methodology-content a:hover {
+    color: rgb(10, 133, 92);
+    transition: 0.3s;
+}
+
+
+
+.methodology-content table {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 35px 0;
+
+    border-collapse: collapse;
+
+    font-size: 1rem;
+}
+
+.methodology-content th,
+.methodology-content td {
+    padding: 14px 16px;
+
+    border-bottom: 1px solid #bdbdbd;
+
+    text-align: left;
+}
+
+.methodology-content th {
+    color: #222;
+    font-weight: 600;
+}
+
+.methodology-content td {
+    color: #444;
+}
+
+
+
+.methodology-content code {
+    background-color: #dedede;
+
+    padding: 3px 7px;
+
+    border-radius: 3px;
+
+    font-family: "Courier New", monospace;
+    font-size: 0.95em;
+}
+
+
+.methodology-content pre {
+    max-width: 800px;
+
+    background-color: #dedede;
+
+    padding: 20px 25px;
+
+    margin: 30px 0;
+
+    overflow-x: auto;
+
+    border-left: 4px solid rgb(10, 133, 92);
+
+    font-family: "Courier New", monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+
+.methodology-content img {
+    display: block;
+
+    max-width: 100%;
+    height: auto;
+
+    margin: 35px auto;
+}
+
+
+.methodology-content blockquote {
+    max-width: 750px;
+
+    margin: 30px 0;
+
+    padding: 15px 25px;
+
+    border-left: 4px solid #999;
+
+    color: #555;
+
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+
+
+.methodology-content hr {
+    border: none;
+
+    border-top: 1px solid #b0b0b0;
+
+    margin: 60px 0;
+}
+
+@media (max-width: 768px) {
+
+    #about {
+        padding: 50px 25px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
+
+    #about h1 {
+        border-right: none;
+        border-bottom: 2px solid #b0b0b0;
+
+        padding-right: 0;
+        padding-bottom: 15px;
+
+        width: 100%;
+    }
+
+    .methodology-content {
+        padding: 50px 25px;
+    }
+
+    .methodology-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .methodology-content h2 {
+        font-size: 1.7rem;
+    }
+
+    .methodology-content p,
+    .methodology-content li {
+        font-size: 1rem;
+    }
+
+    .methodology-content table {
+        font-size: 0.9rem;
+    }
+}
